@@ -1,0 +1,66 @@
+.recognition-result {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.recognition-result h2 {
+    letter-spacing: 0.1rem;
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.resultImg-container {
+    position: absolute;
+    height: auto;
+    max-width: 450px;
+}
+
+.resultImg-container img {
+    height: 100%;
+    width: 100%;
+}
+
+.resultImg-container .bouding-box {
+    position: absolute;
+    box-shadow: 0 0 0 3px var(--primary-color) inset;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+    .recognition-result h2 {
+        font-size: 1.3rem;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .resultImg-container {
+        max-width: 400px;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .resultImg-container {
+        max-width: 360px;
+    }
+
+    .recognition-result h2 {
+        font-size: 1.1rem;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    .resultImg-container {
+        max-width: 350px;
+    }
+}

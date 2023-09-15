@@ -1,0 +1,31 @@
+.logo-container {
+    display: flex;
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+}
+
+.logo-container h5 {
+    margin: 0;
+    color: var(--primary-color);
+    font-weight: 800;
+    letter-spacing: 0.2rem;
+}
+
+.logo-container img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    margin-right: 1rem;
+}
+
+@media screen and (max-width: 992px) {
+    .logo-container {
+        height: 40px;
+        width: 40px;
+    }
+
+    .logo-container h5 {
+        font-size: 0.65rem;
+    }
+}
