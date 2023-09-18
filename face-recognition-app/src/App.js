@@ -9,15 +9,30 @@ const App = () => {
   const [imgUrl, setImgUrl] = useState('')
   const [box, setBox] = useState({})
   const [route, setRoute] = useState('signin')
+  const [userId, setUserId] = useState('')
+  const [fullName, setFullName] = useState('')
+  const [entries, setEntries] = useState(0)
+
+  const loadUser = (data) => {
+    setUserId(data.data.id)
+    setFullName(data.data.fullName)
+    setEntries(data.data.entries)
+  }
 
   return (
     <>
     <ParticlesComponent />
       <div className='container'>
         <Navigation route={route} setRoute={setRoute} setImgUrl={setImgUrl} />
-        { route === 'signin' || route === 'register' ? <SignIn route={route} setRoute={setRoute}/> :
+        { route === 'signin' || route === 'register' ? <SignIn route={route} setRoute={setRoute} loadUser={loadUser}/> :
         <>
-          <ImageLinkForm setImgUrl={setImgUrl} setBox={setBox} />
+          <ImageLinkForm 
+            setImgUrl={setImgUrl} 
+            setBox={setBox} 
+            userId={userId} 
+            setEntries={setEntries}
+            fullName={fullName} 
+            count={entries} />
           <RecognitionResult imgUrl={imgUrl} box={box} />
         </>
         }

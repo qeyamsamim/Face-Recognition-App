@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 
 import './ImageLinkForm.css'
 
-const ImageLinkForm = ({ setImgUrl, setBox }) => {
+const ImageLinkForm = ({ setImgUrl, setBox, userId, setEntries, fullName, count }) => {
   const [input, setInput] = useState('')
 
   const PAT = '91997f06430d445aab4025ee38e2678e'
@@ -61,13 +62,25 @@ const ImageLinkForm = ({ setImgUrl, setBox }) => {
     setImgUrl(input)
     fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
     .then(response => response.json())
-    .then(result => displayResult(setFaceLocation(result.outputs[0].data.regions[0].region_info.bounding_box)))
+    .then(result => {
+      try{
+        if(result) {
+          axios.put('http://localhost:3001/image', { userId })
+          .then(count => setEntries(count.data))
+        }
+      }
+      catch(e) {
+        console.log(e)
+      }
+      displayResult(setFaceLocation(result.outputs[0].data.regions[0].region_info.bounding_box))
+    })
     .catch(error => console.log('error', error))
   }
 
   return (
     <section className='imageLink-container'>
         <h1>Face Detection</h1>
+        <p>Hey {fullName}, your current entity count is {count}.</p>
         <div className='form-container'>
             <input type="text" placeholder='Image URL' onChange={onInputChange} />
             <button onClick={onSubmit}>Detect</button>

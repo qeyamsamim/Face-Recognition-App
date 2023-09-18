@@ -10,6 +10,16 @@
     color: transparent;
     -webkit-text-stroke-width: 2.5px;
     -webkit-text-stroke-color: var(--primary-color);
+    margin-bottom: 0.7rem;
+}
+
+.imageLink-container p {
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 2rem;
+    letter-spacing: 0.2rem;
+    font-weight: bold;
+    font-size: 1.3rem;
 }
 
 .form-container {
@@ -60,6 +70,10 @@
         font-size: 2.3rem;
     }
 
+    .imageLink-container p {
+        font-size: 1rem;
+    }
+
     .form-container input {
         flex: 0 0 70%;
         max-width: 70%;
@@ -82,6 +96,11 @@
     .imageLink-container h1 {
         font-size: 2rem;
     }
+
+    .imageLink-container p {
+        font-size: 0.9rem;
+    }
+
     .form-container {
         display: block;
     }
@@ -98,5 +117,9 @@
 @media screen and (max-width: 425px) {
     .imageLink-container h1 {
         font-size: 1.8rem;
+    }
+
+    .imageLink-container p {
+        font-size: 0.8rem;
     }
 }
