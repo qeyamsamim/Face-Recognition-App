@@ -59,22 +59,24 @@ const ImageLinkForm = ({ setImgUrl, setBox, userId, setEntries, fullName, count 
   }
 
   const onSubmit = () => {
-    setImgUrl(input)
-    fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
-    .then(response => response.json())
-    .then(result => {
-      try{
-        if(result) {
-          axios.put('http://localhost:3001/image', { userId })
-          .then(count => setEntries(count.data))
+    if (input) {
+      setImgUrl(input)
+      fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        try{
+          if(result) {
+            axios.put('http://localhost:3001/image', { userId })
+            .then(count => setEntries(count.data.entries))
+          }
         }
-      }
-      catch(e) {
-        console.log(e)
-      }
-      displayResult(setFaceLocation(result.outputs[0].data.regions[0].region_info.bounding_box))
-    })
-    .catch(error => console.log('error', error))
+        catch(e) {
+          console.log(e)
+        }
+        displayResult(setFaceLocation(result.outputs[0].data.regions[0].region_info.bounding_box))
+      })
+      .catch(error => console.log('error', error))
+    } 
   }
 
   return (

@@ -4,6 +4,7 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm'
 import ParticlesComponent from './components/Particles/ParticlesComponent'
 import RecognitionResult from './components/RecognitionResult/RecognitionResult'
 import SignIn from './components/SignIn/SignIn'
+import Logo from './components/Logo/Logo'
 
 const App = () => {
   const [imgUrl, setImgUrl] = useState('')
@@ -15,7 +16,7 @@ const App = () => {
 
   const loadUser = (data) => {
     setUserId(data.data.id)
-    setFullName(data.data.fullName)
+    setFullName(data.data.name)
     setEntries(data.data.entries)
   }
 

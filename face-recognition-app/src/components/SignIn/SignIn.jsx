@@ -6,7 +6,7 @@ import './SignIn.css'
 const SignIn = ({route, setRoute, loadUser}) => {
     const [ email, setEmail ] = useState('')
     const [ password, setPassword ] = useState('')
-    const [ fullName, setFullName ] = useState('')
+    const [ name, setname ] = useState('')
     const [ retypePassword, setRetypePassword ] = useState('')
 
     const onChangeRoute = async (e) => {
@@ -21,7 +21,7 @@ const SignIn = ({route, setRoute, loadUser}) => {
                     }
                 })
             } else {
-                await axios.post('http://localhost:3001/register', { fullName, email, password, retypePassword })
+                await axios.post('http://localhost:3001/register', { email, name, password, retypePassword })
                 .then(user => {
                     if (user) {
                         loadUser(user)
@@ -45,8 +45,8 @@ const SignIn = ({route, setRoute, loadUser}) => {
                 <h1>Sign In</h1>
                 <form action="">
                     {route === 'register' && <div className='input-container'>
-                        <label htmlFor="fullName">Full Name</label>
-                        <input type="text" id='fullName' onChange={(event) => setFullName(event.target.value)} />
+                        <label htmlFor="name">Full Name</label>
+                        <input type="text" id='name' onChange={(event) => setname(event.target.value)} />
                     </div>}
                     <div className='input-container'>
                         <label htmlFor="email">Email</label>

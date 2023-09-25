@@ -2,101 +2,99 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const cors = require('cors')
+const knex = require('knex')
+
+const dbConnection = knex({
+    client: 'pg',
+    connection: {
+        host : '127.0.0.1',
+        port : 5432,
+        user : 'postgres',
+        password : 'Nf20####',
+        database : 'face-recognition'
+    }
+})
 
 const app = express()
 
 app.use(bodyParser.json())
 app.use(cors())
 
-const db = {
-    users: [
-        {
-            id: '1',
-            fullName: 'David',
-            email: 'david@gmail.com',
-            password: '123',
-            entries: 0,
-            joined: new Date()
-        },
-        {
-            id: '2',
-            fullName: 'Mari',
-            email: 'mari@gmail.com',
-            password: '123',
-            entries: 0,
-            joined: new Date()
-        }
-    ]
-}
-
-// const checkUser = (idVar) => {
-//     const { id } = idVar
-//     let found = false
-//     db.users.forEach(user => {
-//         if (user.id === id) {
-//             found = true
-//             return res.json(user)
-//         }
-//     })
-//     !found && res.status(404).json('User not found')
-// }
-
 app.get('/', (req, res) => {
-    res.send(db.users)
+    // res.send(db.users)
 })
 
 app.post('/signin', (req, res) => {
-    if (req.body.email === db.users[0].email &&
-        req.body.password === db.users[0].password) {
-        res.json(db.users[0])
-    } else {
-        res.status(400).json('error signing in')
-    }
+    const { email, password } = req.body
+    dbConnection.select('email', 'hash').from('login')
+    .where('email', '=', email)
+    .then(data => {
+        const passCheck = bcrypt.compareSync(password, data[0].hash)
+        if (passCheck) {
+            return dbConnection.select('*').from('users')
+            .where('email', '=', email)
+            .then(user => {
+                res.json(user[0])
+            })
+            .catch(error => res.status(400).json('Unable to get user.'))
+        } else {
+            res.status(400).json('Wrong credentials')
+        }
+    })
+    .catch(error => res.status(400).json('Wrong credentials'))
 })
 
 app.post('/register', (req, res) => {
     const { email, name, password } = req.body
-    bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(password, salt, (err, hash) => {
-            console.log(hash)
+    const hash = bcrypt.hashSync(password, 10)
+    dbConnection.transaction(trx => {
+        trx.insert({hash, email})
+        .into('login')
+        .returning('email')
+        .then(loginEmail => {
+            return trx('users')
+            .returning('*')    
+            .insert({
+                name: name,
+                email: loginEmail[0].email,
+                joined: new Date()
+            })
+            .then(user => {
+                res.json(user[0])
+            })
         })
+        .then(trx.commit)
+        .catch(trx.rollback)
     })
-    db.users.push({
-        id: '3',
-        fullName: name,
-        email: email,
-        password: password,
-        entries: 0,
-        joined: new Date()
-    })
-    res.json(db.users[db.users.length - 1])
+    .catch(error => res.status(400).json('Unable to register.'))
 })
 
 app.get('/profile/:id', (req, res) => {
     const { id } = req.params
-    let found = false
-    db.users.forEach(user => {
-        if (user.id === id) {
-            found = true
-            return res.json(user)
-        }
+    dbConnection.select('*').from('users')
+        .where({id})
+        .then(user => {
+            if (user.length) {
+                res.json(user[0])
+            } else {
+                res.status(404).json('User not found')
+            }
     })
-    !found && res.status(404).json('User not found')
+    .catch(err => res.status(404).json('User not found'))
 })
 
 app.put('/image', (req,res) => {
     const { userId } = req.body
-    let found = false
-    db.users.forEach(user => {
-        if (user.id === userId) {
-            found = true
-            user.entries++
-            return res.json(user.entries)
-        }
+    dbConnection('users')
+    .where('id', '=', userId )
+    .increment('entries', 1)
+    .returning('entries')
+    .then(entries => {
+        res.json(entries[0])
     })
-    !found && res.status(404).json('User not found')
+    .catch(err => res.status(400).json('unable to get entries'))
 })
 
 app.listen(3001, () => {
-    console.log('app is running on port 3000')
+    console.log('app is running on port 3001')
 })
