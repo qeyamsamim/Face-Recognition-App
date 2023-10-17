@@ -10,10 +10,12 @@ const Navigation = ({ route, setRoute, setImgUrl }) => {
     setImgUrl('')
   }
   return (
-    <nav>
-      <Logo />
-      {route === 'home' && <p onClick={onChangeRoute}>Sign Out <MdExitToApp className='signout-icon' /></p>}
-    </nav>
+    <header>
+      <nav>
+        <Logo />
+        {route === 'home' && <p onClick={onChangeRoute}>Sign Out <MdExitToApp className='signout-icon' /></p>}
+      </nav>
+    </header>
   )
 }
 

@@ -5,6 +5,7 @@ import './ImageLinkForm.css'
 
 const ImageLinkForm = ({ setImgUrl, setBox, userId, setEntries, fullName, count }) => {
   const [input, setInput] = useState('')
+  const [error, setError] = useState('')
 
   const PAT = '91997f06430d445aab4025ee38e2678e'
   const USER_ID = 'clarifai'
@@ -66,6 +67,7 @@ const ImageLinkForm = ({ setImgUrl, setBox, userId, setEntries, fullName, count 
       .then(result => {
         try{
           if(result) {
+            setError('')
             axios.put('http://localhost:3001/image', { userId })
             .then(count => setEntries(count.data.entries))
           }
@@ -75,7 +77,7 @@ const ImageLinkForm = ({ setImgUrl, setBox, userId, setEntries, fullName, count 
         }
         displayResult(setFaceLocation(result.outputs[0].data.regions[0].region_info.bounding_box))
       })
-      .catch(error => console.log('error', error))
+      .catch(error => setError('Please Enter a valid Image URL.'))
     } 
   }
 
@@ -84,8 +86,11 @@ const ImageLinkForm = ({ setImgUrl, setBox, userId, setEntries, fullName, count 
         <h1>Face Detection</h1>
         <p>Hey {fullName}, your current entity count is {count}.</p>
         <div className='form-container'>
-            <input type="text" placeholder='Image URL' onChange={onInputChange} />
+            <input type="url" placeholder='Image URL' onChange={onInputChange} required autoFocus />
             <button onClick={onSubmit}>Detect</button>
+        </div>
+        <div className="error-container">
+          {error && <small>{error}</small>}
         </div>
     </section>
   )

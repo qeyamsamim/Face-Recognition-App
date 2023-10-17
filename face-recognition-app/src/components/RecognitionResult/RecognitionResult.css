@@ -13,7 +13,7 @@
 }
 
 .resultImg-container {
-    position: absolute;
+    position: relative;
     height: auto;
     max-width: 450px;
 }

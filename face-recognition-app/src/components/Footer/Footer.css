@@ -1,0 +1,31 @@
+footer {
+    position: absolute;
+    text-align: center;
+    bottom: 0;
+    left: 0;
+    padding: 2rem 0;
+    height: 8rem;
+    width: 100%;
+}
+
+.position {
+    position: static;
+}
+
+footer p {
+    font-size: 12px;
+    letter-spacing: .1rem;
+    color: var(--primary-color);
+}
+
+footer h6 {
+    font-size: 1rem;
+    margin-bottom: 0;
+    margin-top: 0.6rem;
+    color: var(--primary-color);
+}
+
+footer a {
+    color: #fff;
+    vertical-align: middle;
+}

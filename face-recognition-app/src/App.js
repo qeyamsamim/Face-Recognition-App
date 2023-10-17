@@ -4,7 +4,7 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm'
 import ParticlesComponent from './components/Particles/ParticlesComponent'
 import RecognitionResult from './components/RecognitionResult/RecognitionResult'
 import SignIn from './components/SignIn/SignIn'
-import Logo from './components/Logo/Logo'
+import Footer from './components/Footer/Footer'
 
 const App = () => {
   const [imgUrl, setImgUrl] = useState('')
@@ -26,7 +26,7 @@ const App = () => {
       <div className='container'>
         <Navigation route={route} setRoute={setRoute} setImgUrl={setImgUrl} />
         { route === 'signin' || route === 'register' ? <SignIn route={route} setRoute={setRoute} loadUser={loadUser}/> :
-        <>
+        <main>
           <ImageLinkForm 
             setImgUrl={setImgUrl} 
             setBox={setBox} 
@@ -35,7 +35,8 @@ const App = () => {
             fullName={fullName} 
             count={entries} />
           <RecognitionResult imgUrl={imgUrl} box={box} />
-        </>
+          <Footer imgUrl={imgUrl} />
+        </main>
         }
       </div>
     </>

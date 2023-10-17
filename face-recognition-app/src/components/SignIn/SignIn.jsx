@@ -7,31 +7,33 @@ const SignIn = ({route, setRoute, loadUser}) => {
     const [ email, setEmail ] = useState('')
     const [ password, setPassword ] = useState('')
     const [ name, setname ] = useState('')
-    const [ retypePassword, setRetypePassword ] = useState('')
+    const [ error, setError ] = useState('')
 
+    const setRoutAndUser = (user) => {
+        if (user.data.id) {
+            loadUser(user)
+            setRoute('home')
+        }
+    }
     const onChangeRoute = async (e) => {
         e.preventDefault()
         try{
             if (route === 'signin') {
                 await axios.post('http://localhost:3001/signin', { email, password })
                 .then(user => {
-                    if (user.data.id) {
-                        loadUser(user)
-                        setRoute('home')
-                    }
+                    setRoutAndUser(user)
                 })
             } else {
-                await axios.post('http://localhost:3001/register', { email, name, password, retypePassword })
+                await axios.post('http://localhost:3001/register', { email, name, password })
                 .then(user => {
-                    if (user) {
-                        loadUser(user)
-                        setRoute('home')
-                    }
-                })
+                    setRoutAndUser(user)
+                }) 
+            
             }
         }
         catch(e) {
-            console.log(e)
+            console.log(e.response.data)
+            setError(e.response.data)
         }
     }
 
@@ -46,20 +48,25 @@ const SignIn = ({route, setRoute, loadUser}) => {
                 <form action="">
                     {route === 'register' && <div className='input-container'>
                         <label htmlFor="name">Full Name</label>
-                        <input type="text" id='name' onChange={(event) => setname(event.target.value)} />
+                        <input type="text" id='name' onChange={(event) => setname(event.target.value)} required autoFocus />
+                        <div className="error-container">
+                            {(error && !name && route == 'register') && <small>{error}</small>}
+                        </div>
                     </div>}
                     <div className='input-container'>
                         <label htmlFor="email">Email</label>
-                        <input type="email" id='email' onChange={(event) => setEmail(event.target.value)} />
+                        <input type="email" id='email' onChange={(event) => setEmail(event.target.value)} required autoFocus />
+                        <div className="error-container">
+                            {error && <small>{error}</small>}
+                        </div>
                     </div>
                     <div className='input-container'>
                         <label htmlFor="password">Password</label>
-                        <input type="password" id='password' onChange={(event) => setPassword(event.target.value)} />
+                        <input type="password" id='password' onChange={(event) => setPassword(event.target.value)} required />
+                        <div className="error-container">
+                            {error && <small>{error}</small>}
+                        </div>
                     </div>
-                    {route === 'register' && <div className='input-container'>
-                        <label htmlFor="retypePassword">Re-type Password</label>
-                        <input type="password" id='retypePassword' onChange={(event) => setRetypePassword(event.target.value)} />
-                    </div>}
                     <button className='button' onClick={onChangeRoute} type='submit'>{route === 'signin' ? 'Sign in' : 'Register'}</button>
                     <p onClick={onRegister}>{route === 'signin' ? 'Register' : 'Sign In'}</p>
                 </form>

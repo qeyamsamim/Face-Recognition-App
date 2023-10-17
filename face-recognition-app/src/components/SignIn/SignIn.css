@@ -37,13 +37,27 @@
 
 .registration-form .input-container input {
     width: 100%;
-    padding: 0.5rem 0.7rem;
-    font-size: 1.3rem;
+    padding: 0.6rem 0.7rem;
+    font-size: 1.1rem;
     background-color: #000;
     color: var(--primary-color);
     border-radius: 5px;
     border: 2px solid var(--primary-color);
     margin-top: 0.7rem;
+}
+
+.registration-form .input-container .error-container {
+    text-align: left;
+    margin-top: 0.4rem;
+}
+
+.registration-form .input-container small {
+    color: rgb(255, 41, 41);
+    font-size: 0.9rem;
+}
+
+.registration-form .input-container input:focus {
+    outline: none;
 }
 
 .registration-form button {
